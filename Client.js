@@ -34,6 +34,9 @@ function Client(uri, proxy) {
     this.desiredChannelId = undefined;
     this.desiredChannelSettings = undefined;
     this.pingInterval = undefined;
+    this.ping = -1;
+    this.highestPing = -1;
+    this.lowestPing = -1;
     this.canConnect = false;
     this.noteBuffer = [];
     this.noteBufferTime = 0;
@@ -294,8 +297,10 @@ Client.prototype.preventsPlaying = function() {
 
 Client.prototype.receiveServerTime = function(time, echo) {
     var self = this;
-    var now = Date.now();
-    var target = time - now;
+    var target = time - Date.now();
+    self.ping = -target;
+    if (self.highestPing < 0 || -target > self.highestPing) self.highestPing = -target;
+    if (self.lowestPing < 0 || -target < self.lowestPing) self.lowestPing = -target;
     //console.log("Target serverTimeOffset: " + target);
     var duration = 1000;
     var step = 0;
@@ -313,10 +318,9 @@ Client.prototype.receiveServerTime = function(time, echo) {
         }
     }, step_ms);
     // smoothen
-
-    //this.serverTimeOffset = time - now;			// mostly time zone offset ... also the lags so todo smoothen this
+    //this.serverTimeOffset = target;           // mostly time zone offset ... also the lags so todo smoothen this
     // not smooth:
-    //if(echo) this.serverTimeOffset += echo - now;	// mostly round trip time offset
+    //if (echo) this.serverTimeOffset += target; // mostly round trip time offset
 };
 
 Client.prototype.startNote = function(note, vel) {
