@@ -4,7 +4,7 @@ EventEmitter.defaultMaxListeners = 15;
 process.setMaxListeners(0);
 
 class Client extends EventEmitter {
-    constructor() {
+    constructor(token) {
         super()
 
         this.uri = "wss://mppclone.com:8443";
@@ -29,7 +29,7 @@ class Client extends EventEmitter {
         this.permissions = {};
         this['🐈'] = 0;
         this.loginInfo = undefined;
-		this.token = '[h]';
+		this.token = token;
 
         this.bindEventListeners();
 
