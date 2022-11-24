@@ -5,12 +5,11 @@ An easy bot code to use with NodeJS.
 Commands
 
 To add commands you must use this example:
-
-```if(cmd == `${prefix}ex`) { 
-
+<sup>
+if(cmd == `${prefix}ex`) { 
 	client.say(`example`)  <-- what bot will do
-	
-}```
+}
+</sup>
 
 change the command name after `${prefix}` then change what bot
 
